@@ -1,3 +1,6 @@
+#python crop_images.py ./images 256
+
+
 import os
 import sys
 from PIL import Image
@@ -6,6 +9,8 @@ def crop_images(directory, size):
     for filename in os.listdir(directory):
         if filename.endswith(('.jpg', '.jpeg', '.png')):
             file_path = os.path.join(directory, filename)
+            output_directory = os.path.dirname(file_path)  # 入力画像と同じディレクトリを取得
+            print(file_path)
             try:
                 with Image.open(file_path) as image:
                     width, height = image.size
@@ -14,7 +19,8 @@ def crop_images(directory, size):
                     right = (width + size) // 2
                     bottom = (height + size) // 2
                     cropped_image = image.crop((left, top, right, bottom))
-                    cropped_image.save(f"cropped_{filename}")
+                    output_path = os.path.join(output_directory, f"cropped_{filename}")
+                    cropped_image.save(output_path)
             except IOError:
                 print(f"Unable to process image: {file_path}")
 
